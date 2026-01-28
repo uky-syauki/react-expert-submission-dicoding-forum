@@ -3,12 +3,7 @@ import React from 'react';
 export default function Header() {
   return (
     <header className="home-header">
-      <h1>My App</h1>
-      <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-      </nav>
+      <h1>Forum Gabut</h1>
     </header>
   );
 }

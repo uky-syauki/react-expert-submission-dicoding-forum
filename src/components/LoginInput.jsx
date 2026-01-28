@@ -4,8 +4,8 @@ import useInput from '../hooks/useInput';
 import { Link } from 'react-router-dom';
 
 function LoginInput({ login }) {
-  const [email, onEmail] = useInput();
-  const [password, onPasswordChange] = useInput();
+  const [email, onEmail] = useInput('');
+  const [password, onPasswordChange] = useInput('');
 
   return (
     <form className='auth-card'>
@@ -22,7 +22,7 @@ function LoginInput({ login }) {
         <input className='input-group' type='password' value={password} onChange={onPasswordChange} placeholder='password' />
       </div>
 
-      <button type='submit' onClick={() => login({ email, password })}>Login</button>
+      <button type='button' onClick={() => login({ email, password })}>Login</button>
       <p className='footer-text'>
         Tidak memiliki akun? <span><Link to="/register">Daftar</Link></span>
       </p>

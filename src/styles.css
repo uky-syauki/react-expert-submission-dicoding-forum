@@ -8,7 +8,7 @@
 /* ===== PAGE BACKGROUND ===== */
 .home-wrapper {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #010206, #201f21);
   padding-bottom: 60px; /* ruang footer */
 }
 
@@ -155,4 +155,9 @@
 
 .footer-item svg {
   stroke-width: 1.5;
+}
+
+.loading {
+  position: sticky;
+  top: 0;
 }

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function RegisterInput({ onRegister }) {
-  const [username, onUsername] = useInput();
-  const [email, onEmail] = useInput();
-  const [password, onPassword] = useInput();
+  const [name, onName] = useInput('');
+  const [email, onEmail] = useInput('');
+  const [password, onPassword] = useInput('');
 
   return (
     <form className='auth-card'>
@@ -14,8 +14,8 @@ function RegisterInput({ onRegister }) {
       <p className='subtitle'>Daftar untuk memulai</p>
 
       <div className='input-group'>
-        <label>Username</label>
-        <input type="text" value={username} onChange={onUsername} placeholder='Username' />
+        <label>Nama</label>
+        <input type="text" value={name} onChange={onName} placeholder='Username' />
       </div>
 
       <div className='input-group'>
@@ -28,7 +28,7 @@ function RegisterInput({ onRegister }) {
         <input type="password" value={password} onChange={onPassword} placeholder='Password' />
       </div>
 
-      <button type='submit' onClick={() => onRegister({ username, email, password })}>Daftar</button>
+      <button type='button' onClick={() => onRegister({ name, email, password })}>Daftar</button>
 
       <p className='footer-text'>Sudah punya akun? <span><Link to="/login">Masuk</Link></span></p>
     </form>
