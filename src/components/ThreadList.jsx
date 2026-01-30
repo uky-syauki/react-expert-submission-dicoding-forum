@@ -1,21 +1,20 @@
 import React from 'react';
-import DiscussionCard from './DiscussionCard';
+import ThreadItem from './threadItem';
 import PropTypes from 'prop-types';
 import postedAt from '../utils/postedAt';
 
-function Main({ threads }) {
+function treadList({ threads }) {
   return (
     <main className='home-main'>
       <h3 className='discussion-head'>Diskusi Tersedia</h3>
       {threads.map((disccus) => (
-        <DiscussionCard
+        <ThreadItem
           key={disccus.id}
           category={disccus.category}
           title={disccus.title}
           body={disccus.body}
           likes={disccus.upVotesBy.length}
           comments={disccus.totalComments}
-          views={15}
           daysAgo={postedAt(disccus.createdAt)}
           author={disccus.ownerId}
         />
@@ -24,7 +23,7 @@ function Main({ threads }) {
   );
 }
 
-Main.propTypes = {
+treadList.propTypes = {
   threads: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
@@ -37,4 +36,4 @@ Main.propTypes = {
   })).isRequired,
 };
 
-export default Main;
+export default treadList;

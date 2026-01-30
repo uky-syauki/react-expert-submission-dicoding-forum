@@ -151,6 +151,7 @@ const api = (() => {
   }
 
   async function getThreadDetail(threadId) {
+    console.log('Fetching thread detail for ID:', threadId);
     const response = await fetch(`${BASE_URL}/threads/${threadId}`, {
       method: 'GET',
       headers: {
@@ -161,13 +162,15 @@ const api = (() => {
     const responseJson = await response.json();
     const { status, message } = responseJson;
 
+    console.log('Thread detail response:', responseJson);
+
     if (status !== 'success') {
       throw new Error(message);
     }
 
-    const { data: { thread } } = responseJson;
+    const { data: { detailThread } } = responseJson;
 
-    return thread;
+    return detailThread;
   }
 
   async function postComment(threadId, content) {
