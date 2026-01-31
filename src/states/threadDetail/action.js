@@ -52,14 +52,12 @@ function toggleNeutralVoteThreadDetailActionCreator({ userId }) {
 }
 
 function asyncReceiveThreadDetail(threadId) {
-  console.log('asyncReceiveThreadDetail threadId:', threadId);
   return async (dispatch) => {
     dispatch(showLoading());
     dispatch(clearThreadDetailActionCreator());
     try {
       const threadDetail = await api.getThreadDetail(threadId);
       dispatch(receiveThreadDetailActionCreator(threadDetail));
-      console.log('Fetched thread detail:', threadDetail);
     } catch (error) {
       alert(error.message);
     }

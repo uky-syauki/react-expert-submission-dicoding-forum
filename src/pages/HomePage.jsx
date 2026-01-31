@@ -3,6 +3,7 @@ import ThreadList from '../components/ThreadList';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { asyncPopulateData } from '../states/shared/action';
+import { asyncAddThread } from '../states/threads/action';
 
 function HomePage() {
   const {
@@ -16,7 +17,9 @@ function HomePage() {
     dispatch(asyncPopulateData());
   }, [dispatch]);
 
-  console.log('HomePage threads:', threads);
+  const onAddThread = ({ title, category, body }) => {
+    dispatch(asyncAddThread({ title, category, body }));
+  };
 
   const treadlist = threads.map((tread) => ({
     ...tread,
@@ -25,7 +28,7 @@ function HomePage() {
 
   return (
     <div className='home-wrapper'>
-      <ThreadList threads={treadlist} users={users} authUser={authUser} />
+      <ThreadList threads={treadlist} users={users} authUser={authUser} onAddThread={onAddThread} />
     </div>
   );
 }

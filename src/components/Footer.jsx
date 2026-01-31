@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function Footer({ authUser, onSingOut }) {
-  console.log('authUser:', authUser);
   return (
     <footer className='home-footer'>
       <nav className='footer-nav'>

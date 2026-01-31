@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { asyncReceiveThreadDetail } from '../states/threadDetail/action';
-// import ThreadItem from '../components/threadItem';
 import ThreadDetail from '../components/ThreadDetail';
 
 function DetailPage() {
@@ -15,9 +14,7 @@ function DetailPage() {
 
   useEffect(() => {
     dispatch(asyncReceiveThreadDetail(id));
-    console.log('DetailPage id:', id);
   }, [dispatch, id]);
-  console.log('DetailPage threadDetail:', threadDetail);
 
   if (!threadDetail) {
     return <div>Loading...</div>;

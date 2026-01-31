@@ -22,7 +22,6 @@ function asyncPreloadProcess() {
       const authUser = await api.getOwnProfile();
       dispatch(setAuthUserActionCreator(authUser));
     } catch {
-      console.log('Gagal mendapatkan data user');
       dispatch(setAuthUserActionCreator(null));
     } finally {
       dispatch(setIsPreloadActionCreator(false));

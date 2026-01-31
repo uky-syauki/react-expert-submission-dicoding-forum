@@ -16,7 +16,6 @@ const api = (() => {
   }
 
   function putAccessToken(token) {
-    console.log('Token stored:', token);
     localStorage.setItem('accessToken', token);
   }
 
@@ -42,7 +41,6 @@ const api = (() => {
   }
 
   async function login({ email, password }) {
-    console.log('Logging in with:', email, password);
     const response = await fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: {
@@ -129,7 +127,6 @@ const api = (() => {
   }
 
   async function getAllThreads() {
-    console.log('Fetching all threads');
     const response = await fetch(`${BASE_URL}/threads`, {
       method: 'GET',
       headers: {
@@ -145,13 +142,11 @@ const api = (() => {
     }
 
     const { data: { threads } } = responseJson;
-    console.log('Fetched threads:', threads);
 
     return threads;
   }
 
   async function getThreadDetail(threadId) {
-    console.log('Fetching thread detail for ID:', threadId);
     const response = await fetch(`${BASE_URL}/threads/${threadId}`, {
       method: 'GET',
       headers: {
@@ -162,7 +157,6 @@ const api = (() => {
     const responseJson = await response.json();
     const { status, message } = responseJson;
 
-    console.log('Thread detail response:', responseJson);
 
     if (status !== 'success') {
       throw new Error(message);

@@ -12,8 +12,6 @@ function RegisterPage() {
 
   const onRegister = ({ name, email, password }) => {
     dispatch(asyncRegisterUser({ name, email, password }));
-
-    console.log('onRegister called with:', name, email, password);
     navigate('/login');
   };
 
