@@ -154,7 +154,7 @@ body{
   display:flex;justify-content:center;align-items:center;font-size:14px;z-index:1000;border-top:1px solid rgba(0,0,0,0.25)
 }
 .footer-nav{display:flex;justify-content:space-around;width:50%}
-.footer-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--text);text-decoration:none}
+.footer-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;color:var(--text);text-decoration:none; cursor: pointer;}
 .footer-item svg{stroke-width:1.5}
 
 /* =========================
@@ -189,7 +189,7 @@ body{
 }
 
 /* stats / footer inside card */
-.discussion-footer{display:flex;justify-content:space-between;align-items:center;font-size:13px;opacity:0.95}
+.discussion-footer{display:flex;justify-content:flex-start;align-items:center;font-size:13px;opacity:0.95;gap:12px}
 .discussion-stats{display:flex;align-items:center;gap:14px}
 .discussion-stats span{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:0.95rem}
 
@@ -197,7 +197,7 @@ body{
 .discussion-meta strong{font-weight:700;color:var(--text)}
 
 /* avatar & owner */
-.detail-avatar{width:36px;height:36px;border-radius:999px;object-fit:cover;border:1px solid rgba(255,255,255,0.06);margin:0 8px}
+.detail-avatar{width:24px;height:24px;border-radius:999px;object-fit:cover;border:1px solid rgba(255,255,255,0.06);margin:0 8px}
 
 /* =========================
    COMMENTS SECTION (NEW / IMPROVED)
@@ -292,7 +292,7 @@ body{
 /* =========================
    UTIL & RESPONSIVE
    ========================= */
-.loading{position:sticky;top:0}
+.loading{position:sticky;top:0; z-index: 9999; color: red;}
 @media (max-width:900px){
   :root{--card-width:100%}
   .home-main{padding:16px}
@@ -303,4 +303,122 @@ body{
   .detail-avatar{width:28px;height:28px}
   .thread-input-container{padding:12px}
   .comment-card{padding:10px}
+}
+
+/* CommentInput (improved) */
+.comment-input {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 760px;
+  margin: 12px auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.06);
+  flex: 0 0 40px;
+}
+
+.comment-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-body textarea {
+  width: 100%;
+  min-height: 78px;
+  max-height: 240px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: var(--text, #eaeaea);
+  font-size: 0.95rem;
+  resize: vertical;
+  outline: none;
+  line-height: 1.45;
+  transition: box-shadow .14s ease, border-color .14s ease;
+}
+
+.comment-body textarea::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+.comment-body textarea:focus {
+  border-color: rgba(124,124,255,0.45);
+  box-shadow: 0 8px 20px rgba(92,92,200,0.06);
+}
+
+.comment-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.comment-counter {
+  color: rgba(255,255,255,0.52);
+  font-size: 0.85rem;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.comment-send-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--accent-1, #7c7cff), var(--accent-2, #5f9cff));
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+
+.comment-send-btn[disabled],
+.comment-send-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.comment-send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(92,92,200,0.22);
+}
+
+/* disabled when user not logged in */
+.comment-input-disabled {
+  max-width: 760px;
+  margin: 12px auto;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  border: 1px dashed rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* responsive */
+@media (max-width: 560px) {
+  .comment-input { padding: 10px; gap: 10px; }
+  .comment-avatar { width: 36px; height: 36px; }
+  .comment-send-btn { padding: 8px 12px; }
 }

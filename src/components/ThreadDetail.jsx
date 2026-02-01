@@ -1,47 +1,132 @@
+// components/ThreadDetail.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaThumbsUp, FaThumbsDown, FaRegThumbsDown, FaRegThumbsUp } from 'react-icons/fa';
+import {
+  FaThumbsUp,
+  FaThumbsDown,
+  FaRegThumbsUp,
+  FaRegThumbsDown,
+} from 'react-icons/fa';
 import postedAt from '../utils/postedAt';
 import CommentItem from './CommentItem';
+import CommentInput from './CommentInput';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  asyncToggleUpvoteThreadDetail,
+  asyncToggleDownvoteThreadDetail,
+  asyncAddCommentThreadDetail,
+} from '../states/threadDetail/action';
 
-function ThreadDetail({ id, title, body, category, upVotesBy, downVotesBy, createdAt, owner, comments, authUser }) {
-  console.log('ThreadDetail id:', id);
-  let hasUpvoted = false;
-  let hasDownvoted = false;
+function ThreadDetail(props) {
+  const {
+    id,
+    title: titleProp,
+    body: bodyProp,
+    category: categoryProp,
+    upVotesBy: upVotesByProp = [],
+    downVotesBy: downVotesByProp = [],
+    createdAt: createdAtProp,
+    owner: ownerProp = {},
+    comments: commentsProp = [],
+    authUser,
+  } = props;
 
-  if (authUser) {
-    hasUpvoted = upVotesBy.includes(authUser.id);
-    hasDownvoted = downVotesBy.includes(authUser.id);
+  const dispatch = useDispatch();
+
+  // Ambil thread paling "fresh" dari store (utamakan state.threadDetail)
+  const threadFromStore = useSelector((state) => state.threadDetail && state.threadDetail.id === id
+    ? state.threadDetail
+    : state.threads?.find((t) => t.id === id) || null);
+
+  const thread = threadFromStore || {
+    title: titleProp,
+    body: bodyProp,
+    category: categoryProp,
+    upVotesBy: upVotesByProp,
+    downVotesBy: downVotesByProp,
+    createdAt: createdAtProp,
+    owner: ownerProp,
+    comments: commentsProp,
+  };
+
+  const { title, body, category, upVotesBy, downVotesBy, createdAt, owner, comments } = thread;
+
+  const hasUpvoted = authUser ? upVotesBy.includes(authUser.id) : false;
+  const hasDownvoted = authUser ? downVotesBy.includes(authUser.id) : false;
+
+  const handleUpvote = (e) => {
+    e.stopPropagation();
+    if (!authUser) return;
+    dispatch(asyncToggleUpvoteThreadDetail());
+  };
+
+  const handleDownvote = (e) => {
+    e.stopPropagation();
+    if (!authUser) return;
+    dispatch(asyncToggleDownvoteThreadDetail());
+  };
+
+  const onAddComment = (content) => {
+    console.log('Thread id: ', id);
+    console.log('Add comment:', content);
+    if (!authUser) return;
+    dispatch(asyncAddCommentThreadDetail(id, content));
+  };
+
+  if (!threadFromStore && !titleProp) {
+    return <div className="glass-card discussion-card">Loading…</div>;
   }
 
-  const onUpvote = () => {
-    hasUpvoted = true;
-  };
-
-  const onDownvote = () => {
-    hasDownvoted = true;
-  };
-
   return (
-    <div className='glass-card discussion-card'>
+    <div className='glass-card discussion-card' role="article" aria-labelledby={`thread-${id}`}>
+      {/* <LoadingBar /> */}
       <p className='discussion-tag'>#{category}</p>
-      <h2 className='discussion-title'>{title}</h2>
-      <p className='discussion-desc' dangerouslySetInnerHTML={{ __html: body }}></p>
+      <h2 id={`thread-${id}`} className='discussion-title'>{title}</h2>
 
-      <div className='disscussion-footer'>
-        <div className='discussion-stats'>
-          <span className='vote' onClick={onUpvote}>{hasUpvoted ? <FaThumbsUp className="upvoted" /> : <FaRegThumbsUp />} {upVotesBy.length}</span>
-          <span className='vote' onClick={onDownvote}>{hasDownvoted ? <FaThumbsDown className="downvoted" /> : <FaRegThumbsDown />} {downVotesBy.length}</span>
+      <div className='discussion-desc' dangerouslySetInnerHTML={{ __html: body }} />
+
+      <div className='discussion-footer'>
+        <div className='discussion-stats' aria-hidden={false}>
+
+          <button
+            type='button'
+            className={`vote ${hasUpvoted ? 'voted-up' : ''}`}
+            onClick={handleUpvote}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleUpvote(e); }}
+            aria-pressed={hasUpvoted}
+            disabled={!authUser}
+            title={authUser ? (hasUpvoted ? 'Batalkan upvote' : 'Upvote') : 'Login untuk vote'}
+          >
+            {hasUpvoted ? <FaThumbsUp /> : <FaRegThumbsUp />} <span>{upVotesBy.length}</span>
+          </button>
+
+          <button
+            type='button'
+            className={`vote ${hasDownvoted ? 'voted-down' : ''}`}
+            onClick={handleDownvote}
+            onKeyDown={(e) => { if (e.key === 'Enter') handleDownvote(e); }}
+            aria-pressed={hasDownvoted}
+            disabled={!authUser}
+            title={authUser ? (hasDownvoted ? 'Batalkan downvote' : 'Downvote') : 'Login untuk vote'}
+          >
+            {hasDownvoted ? <FaThumbsDown /> : <FaRegThumbsDown />} <span>{downVotesBy.length}</span>
+          </button>
+
         </div>
+
+        {/* <div className='discussion-meta'> */}
         <span>Dibuat oleh</span>
-        <img src={owner.avatar} alt={owner.name} className='detail-avatar' />
-        <span className='owner-name'> {owner.name} </span>
+        <img src={owner?.avatar} alt={owner?.name} className='detail-avatar' />
+        <span className='owner-name'> {owner?.name} </span>
         <span> {postedAt(createdAt)}</span>
       </div>
+      {/* </div> */}
+
       <div className='comments-section'>
         <h3>Beri Komentar</h3>
-        {comments.map((comment) => (
-          <CommentItem key={comment.id} comment={comment} authUser={authUser} />
+        <CommentInput onAddComment={onAddComment} threadId={id} authUser={authUser} />
+        {comments?.map((comment) => (
+          <CommentItem key={comment.id} threadId={id} comment={comment} authUser={authUser} />
         ))}
       </div>
     </div>
@@ -50,25 +135,32 @@ function ThreadDetail({ id, title, body, category, upVotesBy, downVotesBy, creat
 
 ThreadDetail.propTypes = {
   id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
-  upVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
-  downVotesBy: PropTypes.arrayOf(PropTypes.string).isRequired,
-  createdAt: PropTypes.string.isRequired,
-  owner: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    avatar: PropTypes.string,
-  }).isRequired,
-  comments: PropTypes.arrayOf(PropTypes.object).isRequired,
+  title: PropTypes.string,
+  body: PropTypes.string,
+  category: PropTypes.string,
+  upVotesBy: PropTypes.arrayOf(PropTypes.string),
+  downVotesBy: PropTypes.arrayOf(PropTypes.string),
+  createdAt: PropTypes.string,
+  owner: PropTypes.object,
+  comments: PropTypes.arrayOf(PropTypes.object),
   authUser: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    email: PropTypes.string,
     avatar: PropTypes.string,
-  }).isRequired,
+  }),
+};
+
+ThreadDetail.defaultProps = {
+  title: '',
+  body: '',
+  category: '',
+  upVotesBy: [],
+  downVotesBy: [],
+  createdAt: '',
+  owner: {},
+  comments: [],
+  authUser: null,
 };
 
 export default ThreadDetail;

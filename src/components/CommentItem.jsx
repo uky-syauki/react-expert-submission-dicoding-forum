@@ -2,23 +2,50 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import postedAt from '../utils/postedAt';
 import { FaThumbsUp, FaThumbsDown, FaRegThumbsDown, FaRegThumbsUp } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import {
+  asyncToggleUpvoteComment,
+  asyncToggleDownvoteComment,
+} from '../states/threadDetail/action';
 
-function CommentItem({ comment, authUser }) {
-  let hasUpvoted = false;
-  let hasDownvoted = false;
+function CommentItem({ comment, threadId, authUser }) {
+  const dispatch = useDispatch();
 
-  if (authUser) {
-    hasUpvoted = comment.upVotesBy.includes(authUser.id);
-    hasDownvoted = comment.downVotesBy.includes(authUser.id);
-  }
+  const hasUpvoted = authUser ? comment.upVotesBy.includes(authUser.id) : false;
+  const hasDownvoted = authUser ? comment.downVotesBy.includes(authUser.id) : false;
+
+  const handleUpvote = (e) => {
+    console.log('upvote comment');
+    e.stopPropagation();
+    if (!authUser) return;
+    dispatch(asyncToggleUpvoteComment(threadId, comment.id));
+  };
+
+  const handleDownvote = (e) => {
+    e.stopPropagation();
+    if (!authUser) return;
+    dispatch(asyncToggleDownvoteComment(threadId, comment.id));
+  };
 
   return (
     <div className='comment-card'>
       <p className='comment-body' dangerouslySetInnerHTML={{ __html: comment.content }}></p>
       <div className='discussion-footer'>
         <div className='discussion-stats'>
-          <span className='vote'>{hasUpvoted ? <FaThumbsUp className="upvoted" /> : <FaRegThumbsUp />} {comment.upVotesBy.length}</span>
-          <span className='vote'>{hasDownvoted ? <FaThumbsDown className="downvoted" /> : <FaRegThumbsDown />} {comment.downVotesBy.length}</span>
+          <button
+            type='button'
+            className={`vote ${hasUpvoted ? 'voted-up' : ''}`}
+            onClick={handleUpvote}
+          >
+            {hasUpvoted ? <FaThumbsUp /> : <FaRegThumbsUp />} <span>{comment.upVotesBy.length}</span>
+          </button>
+          <button
+            type='button'
+            className={`vote ${hasDownvoted ? 'voted-down' : ''}`}
+            onClick={handleDownvote}
+          >
+            {hasDownvoted ? <FaThumbsDown className="downvoted" /> : <FaRegThumbsDown />} <span>{comment.downVotesBy.length}</span>
+          </button>
         </div>
         <span>Dibuat oleh</span>
         <img src={comment.owner.avatar} alt={comment.owner.name} className='detail-avatar' />
@@ -47,6 +74,7 @@ CommentItem.propTypes = {
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
   }),
+  threadId: PropTypes.string.isRequired,
 };
 
 export default CommentItem;

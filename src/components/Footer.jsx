@@ -2,12 +2,19 @@ import React from 'react';
 import { HiOutlineChatAlt2, HiOutlineChartBar, HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Footer({ authUser, onSingOut }) {
+  const navigate = useNavigate();
+
+  const handleNavigateHome = () => {
+    navigate('/');
+  };
+
   return (
     <footer className='home-footer'>
       <nav className='footer-nav'>
-        <a href="#" className='footer-item'>
+        <a onClick={handleNavigateHome} className='footer-item'>
           <HiOutlineChatAlt2 size={20} />
           <span>Threads</span>
         </a>

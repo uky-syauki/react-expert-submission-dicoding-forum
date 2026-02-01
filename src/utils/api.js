@@ -237,6 +237,7 @@ const api = (() => {
   }
 
   async function upvoteComment(threadId, commentId) {
+    console.log('api upvote comment');
     const response = await _fetchWithAuth(`${BASE_URL}/threads/${threadId}/comments/${commentId}/up-vote`, {
       method: 'POST',
       headers: {

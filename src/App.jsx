@@ -30,7 +30,7 @@ function App() {
   // if (authUser !== null) {
   return (
     <>
-      <Loading />
+      <Loading style={{ backgroundColor: '#7c7cff', height: 3, zIndex: 2000 }}/>
       <Header />
       <main>
         <Routes>
