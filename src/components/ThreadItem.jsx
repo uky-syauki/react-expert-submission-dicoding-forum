@@ -5,6 +5,7 @@ import {
   FaThumbsDown,
   FaRegThumbsUp,
   FaRegThumbsDown,
+  FaCommentAlt,
 } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +14,7 @@ import {
   asyncToggleDownvoteThread,
 } from '../states/threads/action';
 
-function ThreadItem({ id, category, title, body, upVoteBy, downVoteBy, daysAgo, author }) {
+function ThreadItem({ id, category, title, body, upVoteBy, downVoteBy, daysAgo, author, comments }) {
   const { authUser } = useSelector((states) => states);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -77,6 +78,8 @@ function ThreadItem({ id, category, title, body, upVoteBy, downVoteBy, daysAgo, 
             {isDownvoted ? <FaThumbsDown /> : <FaRegThumbsDown />}
             <span>{downVoteBy.length}</span>
           </button>
+
+          <span className='vote'><FaCommentAlt />{comments}</span>
         </div>
 
         <div className='discussion-meta'>
@@ -94,6 +97,7 @@ ThreadItem.propTypes = {
   body: PropTypes.string.isRequired,
   upVoteBy: PropTypes.arrayOf(PropTypes.string).isRequired,
   downVoteBy: PropTypes.arrayOf(PropTypes.string).isRequired,
+  comments: PropTypes.number.isRequired,
   daysAgo: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,
 };

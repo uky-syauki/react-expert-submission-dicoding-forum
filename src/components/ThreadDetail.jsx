@@ -6,6 +6,7 @@ import {
   FaThumbsDown,
   FaRegThumbsUp,
   FaRegThumbsDown,
+  FaCommentAlt,
 } from 'react-icons/fa';
 import postedAt from '../utils/postedAt';
 import CommentItem from './CommentItem';
@@ -111,6 +112,8 @@ function ThreadDetail(props) {
           >
             {hasDownvoted ? <FaThumbsDown /> : <FaRegThumbsDown />} <span>{downVotesBy.length}</span>
           </button>
+
+          <span className='vote'><FaCommentAlt />{comments.length}</span>
 
         </div>
 

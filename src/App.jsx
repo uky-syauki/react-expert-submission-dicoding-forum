@@ -5,6 +5,7 @@ import Loading from './components/Loading';
 import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import DetailPage from './pages/DetailPage';
+import LeaderboardPage from './pages/LeaderboardPage';
 import { asyncUnsetAuthUser } from './states/authUser/action';
 import { asyncPreloadProcess } from './states/isPreload/action';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,12 +31,13 @@ function App() {
   // if (authUser !== null) {
   return (
     <>
-      <Loading style={{ backgroundColor: '#7c7cff', height: 3, zIndex: 2000 }}/>
+      <Loading />
       <Header />
       <main>
         <Routes>
           <Route path='/' element={<HomePage authUser={authUser} onSingOut={onSingOut} />} />
           <Route path='/threads/:id' element={<DetailPage authUser={authUser} onSingOut={onSingOut} />} />
+          <Route path='/leaderboards' element={<LeaderboardPage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
         </Routes>

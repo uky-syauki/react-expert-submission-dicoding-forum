@@ -11,6 +11,10 @@ function Footer({ authUser, onSingOut }) {
     navigate('/');
   };
 
+  const handleNavigateLeaderboards = () => {
+    navigate('/leaderboards');
+  };
+
   return (
     <footer className='home-footer'>
       <nav className='footer-nav'>
@@ -19,7 +23,7 @@ function Footer({ authUser, onSingOut }) {
           <span>Threads</span>
         </a>
 
-        <a href="#" className='footer-item'>
+        <a onClick={handleNavigateLeaderboards} className='footer-item'>
           <HiOutlineChartBar size={20} />
           <span>Leaderboards</span>
         </a>
